@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import tkinter as tk
 import tkinter.ttk as ttk
+from tkinter.colorchooser import askcolor
 import json
 
 days = ["Sun", "Mon", "Tues", "Weds", "Thurs", "Fri", "Sat"]
@@ -39,9 +40,15 @@ class Tile():
             self.label.bind("<Button-1>", self.on_click)
 
     def on_click(self, event):
-        def updateText(event):
+        def updateText():
             self.label.config(text=textInput.get())
             win.destroy()
+
+        def changeColor():
+            colors = askcolor(title="Tkinter Color Chooser")
+            self.block.color = colors
+            self.box.config(bg=colors[1])
+            self.label.config(bg=colors[1])
 
         if self.label:
             win = tk.Toplevel()
@@ -49,12 +56,15 @@ class Tile():
             win.wm_title("New Event")
             win.bind('<Return>', updateText)
 
-            lbl = tk.Label(win, text="Label: ")
+            lbl = tk.Label(win, text="Event Name: ")
             lbl.grid(row=0, column=0)
 
             textInput = ttk.Entry(win)
             textInput.grid(row=0, column=1)
             textInput.focus()
+
+            colorButton = ttk.Button(win, text='Select a Color', command=changeColor)
+            colorButton.grid(row=1, column=0)
 
             button = ttk.Button(win, text="Update", command=updateText)
             button.grid(row=0, column=2)
