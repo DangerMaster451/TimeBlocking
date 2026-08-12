@@ -1,4 +1,5 @@
 from datetime import datetime
+import tkinter as tk
 import json
 
 class Block():
@@ -21,10 +22,30 @@ class Block():
         return cls(data["name"], datetime.strptime(data["startTime"], format),
                    datetime.strptime(data["endTime"], format), data["color"], data["tags"])
 
-   
+class Tile():
+    def __init__(self, block:Block, box:tk.Frame, row:int, column:int):
+        self.block = block
+        self.box = box
+        self.row = row
+        self.column = column
 
-b = Block("Band", datetime(2000, 1, 1, 0, 0, 0), datetime(2000, 1, 1, 1, 0, 0), "white", ["#busy"])
-s = b.toJSON()
-print(s)
-c = Block.fromJSON(s)
-print(c.tags)
+
+def generate_tiles(root:tk.Tk, width:int, height:int):
+    for y in range(height):
+        for x in range(width):
+            box = tk.Frame(root, width=60, height=12, bg="gray", highlightthickness=1, highlightcolor="black")
+            box.grid(row=y, column=x)
+            t = Tile(Block("", datetime.now(), datetime.now(), "gray", ["#empty"]), box, x, y)
+
+    root.update_idletasks()
+    root.update()
+            
+
+
+root = tk.Tk()
+root.title("Time Blocking App")
+
+generate_tiles(root, 5, 33)
+
+
+root.mainloop()
