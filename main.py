@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import tkinter as tk
+import tkinter.ttk as ttk
 import json
 
 days = ["Sun", "Mon", "Tues", "Weds", "Thurs", "Fri", "Sat"]
@@ -26,7 +27,7 @@ class Block():
                     datetime.strptime(data["endTime"], format), data["color"], data["tags"])
 
 class Tile():
-    def __init__(self, block:Block, box:tk.Frame, row:int, column:int, label:tk.Label|None = None):
+    def __init__(self, block:Block, box:tk.Frame, row:int, column:int, label:tk.Label):
         self.block = block
         self.box = box
         self.row = row
@@ -38,9 +39,26 @@ class Tile():
             self.label.bind("<Button-1>", self.on_click)
 
     def on_click(self, event):
+        def updateText(event):
+            self.label.config(text=textInput.get())
+            win.destroy()
+
         if self.label:
-            self.label.config(text="test")
-        
+            win = tk.Toplevel()
+            win.geometry("500x250")
+            win.wm_title("New Event")
+            win.bind('<Return>', updateText)
+
+            lbl = tk.Label(win, text="Label: ")
+            lbl.grid(row=0, column=0)
+
+            textInput = ttk.Entry(win)
+            textInput.grid(row=0, column=1)
+            textInput.focus()
+
+            button = ttk.Button(win, text="Update", command=updateText)
+            button.grid(row=0, column=2)
+
 def generate_tiles(root: tk.Tk, gridWidth: int, gridHeight: int, tileWidth: int, tileHeight: int, startTime: int, timeInterval: int):
     start_time = datetime(2000, 1, 1, startTime, 0)
     times = [start_time + timedelta(minutes=timeInterval * i) for i in range(gridHeight - 1)]
