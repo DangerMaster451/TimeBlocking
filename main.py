@@ -3,6 +3,7 @@ import tkinter as tk
 import json
 
 days = ["Sun", "Mon", "Tues", "Weds", "Thurs", "Fri", "Sat"]
+#https://coolors.co/fcf7ff-c4cad0-878c8f-a4969b-655560
 
 class Block():
     def __init__(self, name:str, startTime:datetime, endTime:datetime, color, tags:list[str]) -> None:
@@ -32,23 +33,23 @@ class Tile():
         self.column = column
 
 def generate_tiles(root: tk.Tk, gridWidth: int, gridHeight: int, tileWidth:int, tileHeight:int, startTime:int, timeInterval:int):
-    start_time = datetime(2000, 1, 1, startTime, 0)  # arbitrary date, just care about time
+    start_time = datetime(2000, 1, 1, startTime, 0)
     times = [start_time + timedelta(minutes=timeInterval * i) for i in range(gridHeight - 1)]
 
     for y in range(gridHeight):
         for x in range(gridWidth):
-            box = tk.Frame(root, width=tileWidth, height=tileHeight, bg="gray",
-                highlightthickness=1, highlightbackground="black", highlightcolor="black")
+            box = tk.Frame(root, width=tileWidth, height=tileHeight, bg="#FCF7FF",
+                highlightthickness=1, highlightbackground="#878C8F", highlightcolor="#878C8F")
             box.grid(row=y, column=x, sticky="nsew")
             box.grid_propagate(False)
-            t = Tile(Block("", datetime.now(), datetime.now(), "gray", ["#empty"]), box, x, y)
+            t = Tile(Block("", datetime.now(), datetime.now(), "#FCF7FF", ["#empty"]), box, x, y)
 
             if x == 0 and y != 0:
-                lbl = tk.Label(box, text=times[y-1].strftime("%I:%M"), padx=0, pady=0, bg="gray")
+                lbl = tk.Label(box, text=times[y-1].strftime("%I:%M").lstrip("0"), padx=0, pady=0, bg="#FCF7FF", font=("Arial", 10), fg="#878C8F")
                 lbl.place(relx=0.5, rely=0.5, anchor="center")
 
             if y == 0 and x != 0:
-                lbl = tk.Label(box, text=days[x-1], padx=0, pady=0, bg="gray")
+                lbl = tk.Label(box, text=days[x-1], padx=0, pady=0, bg="#FCF7FF", font=("Arial", 10), fg="#878C8F")
                 lbl.place(relx=0.5, rely=0.5, anchor="center")
 
     root.update_idletasks()
@@ -57,6 +58,6 @@ def generate_tiles(root: tk.Tk, gridWidth: int, gridHeight: int, tileWidth:int, 
 root = tk.Tk()
 root.title("Time Blocking App")
 
-generate_tiles(root, 8, 33, 60, 25, 6, 30)
+generate_tiles(root, 8, 34, 60, 23, 6, 30)
 
 root.mainloop()
