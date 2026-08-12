@@ -30,12 +30,22 @@ class Tile():
         self.column = column
 
 
-def generate_tiles(root:tk.Tk, width:int, height:int):
-    for y in range(height):
-        for x in range(width):
-            box = tk.Frame(root, width=60, height=12, bg="gray", highlightthickness=1, highlightcolor="black")
-            box.grid(row=y, column=x)
+def generate_tiles(root: tk.Tk, gridWidth: int, gridHeight: int, tileWidth:int, tileHeight:int):
+    for y in range(gridHeight):
+        for x in range(gridWidth):
+            box = tk.Frame(root, width=tileWidth, height=tileHeight, bg="gray",
+                highlightthickness=1, highlightbackground="black", highlightcolor="black")
+            box.grid(row=y, column=x, sticky="nsew")
+            box.grid_propagate(False)
             t = Tile(Block("", datetime.now(), datetime.now(), "gray", ["#empty"]), box, x, y)
+
+            if x == 0 and y != 0:
+                lbl = tk.Label(box, text="10:00", padx=0, pady=0, bg="gray")
+                lbl.place(relx=0.5, rely=0.5, anchor="center")
+
+            if y == 0 and x != 0:
+                lbl = tk.Label(box, text="Mon", padx=0, pady=0, bg="gray")
+                lbl.place(relx=0.5, rely=0.5, anchor="center")
 
     root.update_idletasks()
     root.update()
@@ -45,7 +55,7 @@ def generate_tiles(root:tk.Tk, width:int, height:int):
 root = tk.Tk()
 root.title("Time Blocking App")
 
-generate_tiles(root, 5, 33)
+generate_tiles(root, 8, 33, 60, 25)
 
 
 root.mainloop()
